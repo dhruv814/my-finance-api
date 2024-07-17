@@ -1,5 +1,7 @@
 package com.finance.authentication.config;
 
+import com.finance.authentication.dto.CustomUserDetails;
+import com.finance.authentication.service.CustomUserDetailsService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import jakarta.servlet.FilterChain;
@@ -19,6 +21,9 @@ public class JwtTokanValidatorFilter extends OncePerRequestFilter {
 
     @Autowired
     private JwtTokenProvider jwtTokenProvider;
+
+    @Autowired
+    private CustomUserDetailsService customUserDetailsService;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request,
@@ -40,10 +45,9 @@ public class JwtTokanValidatorFilter extends OncePerRequestFilter {
 
             String email = claims.get("email", String.class);
             System.out.println("Email -> " + email);
-
-            UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(email, null, Collections.emptyList());
+            CustomUserDetails customUserDetails = customUserDetailsService.loadUserByUsername(email);
+            UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(customUserDetails, null, Collections.emptyList());
             SecurityContextHolder.getContext().setAuthentication(auth);
-
         }
 
         filterChain.doFilter(request, response);
@@ -52,8 +56,9 @@ public class JwtTokanValidatorFilter extends OncePerRequestFilter {
 
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
-
-        return request.getServletPath().equals("/register");
+        return request.getServletPath().equals("/register")
+                || request.getServletPath().equals("/login")
+                || request.getServletPath().equals("/users");
     }
 
     private String getTokenFromRequest(HttpServletRequest request) {

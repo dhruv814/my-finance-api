@@ -8,6 +8,7 @@ import com.finance.authentication.service.infc.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.constraints.NotBlank;
+import java.util.Collections;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -52,7 +53,6 @@ public class AuthController {
             return new ResponseEntity<>(userDetails, HttpStatus.OK);
         } else {
             // Handle case where principal is not UserDetails (e.g., anonymous user)
-            System.out.println("principal is not an instance of User details");
             return new ResponseEntity<>("Anonymous User logged in",
                     HttpStatus.OK);
         }
@@ -77,7 +77,17 @@ public class AuthController {
             SecurityContextHolder.getContext().setAuthentication(authentication);
 
             // Generate custom token (e.g., JWT)
-            CustomUserDetails user = (CustomUserDetails) authentication.getPrincipal();
+            UserDto userDto = userService.getUserByEmail(emailAddress);
+
+            CustomUserDetails user = CustomUserDetails.builder()
+                    .userId(userDto.getId())
+                    .username(userDto.getFirstName() + " " + userDto.getLastName())
+                    .password(userDto.getPassword())
+                    .email(userDto.getEmail())
+                    .role(userDto.getRole())
+                    .authorities(Collections.emptyList())
+                    .build();
+
             String token = jwtTokenProvider.generateToken(user);
 
             //String customToken = generateCustomToken(authentication);
@@ -85,7 +95,6 @@ public class AuthController {
             return ResponseEntity.ok(new JwtResponse(user, token));
         } catch (AuthenticationException ex) {
             // If authentication fails, return unauthorized status
-            System.out.println("Returning unauthorized status ");
             return new ResponseEntity<>("Invalid username or password",
                     HttpStatus.UNAUTHORIZED);
         }
@@ -95,7 +104,6 @@ public class AuthController {
     @PostMapping("/register")
     public ResponseEntity<Object> registration(@RequestBody UserDto userDto) {
         UserDto existingUser = userService.getUserByEmail(userDto.getEmail());
-        System.out.println("Hrerererer ");
         if (existingUser != null
                 && existingUser.getEmail() != null
                 && !existingUser.getEmail().isEmpty()) {
@@ -114,7 +122,6 @@ public class AuthController {
     @GetMapping("/logout")
     public void logout(HttpServletRequest request, HttpServletResponse response) {
         // Invalidate current session
-        System.out.println("Session -> " + request.getSession().getId());
         request.getSession().invalidate();
 
         // Redirect user to a logout confirmation page or login page

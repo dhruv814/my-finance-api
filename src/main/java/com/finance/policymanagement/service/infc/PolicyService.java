@@ -7,18 +7,14 @@ public interface PolicyService {
 
     PolicyDto createPolicy(PolicyDto policy);
 
-    PolicyDto updatePolicy(Long id, PolicyDto policy);
+    PolicyDto updatePolicy(String id, PolicyDto policy);
 
-    void deletePolicy(Long id);
+    void deletePolicy(String id);
 
-    PolicyDto getPolicyById(Long id);
+    PolicyDto getPolicyById(String id);
 
     List<PolicyDto> getAllPolicies();
 
     List<PolicyDto> getPoliciesByCreator(Long createdBy);
-
-    List<PolicyDto> getPoliciesByPolicyHolder(Long policyHolderId);
-
-    List<PolicyDto> getPoliciesByLifeInsured(Long lifeInsuredId);
 
 }

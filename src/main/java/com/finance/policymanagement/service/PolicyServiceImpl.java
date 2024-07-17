@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
+@Transactional
 public class PolicyServiceImpl implements PolicyService {
 
     @Autowired
@@ -21,15 +22,19 @@ public class PolicyServiceImpl implements PolicyService {
     @Autowired
     private ModelMapper modelMapper;
 
+    private final PolicyMapper policyMapper = new PolicyMapper();
+
     @Override
-    public PolicyDto createPolicy(PolicyDto policy) {
-        Policy policyInfo = modelMapper.map(policy, Policy.class);
+    public PolicyDto createPolicy(PolicyDto policyDto) {
+        //Policy policyInfo = modelMapper.map(policyDto, Policy.class);
+        Policy policyInfo = policyMapper.toEntity(policyDto);
         Policy savedPolicy = policyRepository.save(policyInfo);
-        return modelMapper.map(savedPolicy, PolicyDto.class);
+        return policyMapper.toDto(savedPolicy);
+        //return modelMapper.map(savedPolicy, PolicyDto.class);
     }
 
     @Override
-    public PolicyDto updatePolicy(Long id, PolicyDto policy) {
+    public PolicyDto updatePolicy(String id, PolicyDto policy) {
         policyRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Insurance Policy", "policy ", "" + id));
         Policy updatedInfo = modelMapper.map(policy, Policy.class);
@@ -39,18 +44,17 @@ public class PolicyServiceImpl implements PolicyService {
     }
 
     @Override
-    public void deletePolicy(Long id) {
+    public void deletePolicy(String id) {
         Policy policy = policyRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Insurance Policy", "policy ", "" + id));
         policyRepository.delete(policy);
     }
 
-    @Transactional
     @Override
-    public PolicyDto getPolicyById(Long id) {
+    public PolicyDto getPolicyById(String id) {
         Policy policy = policyRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Insurance Policy", "policy ", "" + id));
-        return modelMapper.map(policy, PolicyDto.class);
+        return policyMapper.toDto(policy);
     }
 
     @Override
@@ -64,22 +68,6 @@ public class PolicyServiceImpl implements PolicyService {
     @Override
     public List<PolicyDto> getPoliciesByCreator(Long createdBy) {
         List<Policy> policies = policyRepository.findByCreatorId(createdBy);
-        return policies.stream().map(policy
-                -> modelMapper.map(policy, PolicyDto.class))
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public List<PolicyDto> getPoliciesByPolicyHolder(Long policyHolderId) {
-        List<Policy> policies = policyRepository.findByPolicyHolderId(policyHolderId);
-        return policies.stream().map(policy
-                -> modelMapper.map(policy, PolicyDto.class))
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public List<PolicyDto> getPoliciesByLifeInsured(Long lifeInsuredId) {
-        List<Policy> policies = policyRepository.findByLifeInsuredId(lifeInsuredId);
         return policies.stream().map(policy
                 -> modelMapper.map(policy, PolicyDto.class))
                 .collect(Collectors.toList());

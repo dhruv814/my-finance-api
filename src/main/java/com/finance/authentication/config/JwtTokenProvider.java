@@ -2,10 +2,7 @@ package com.finance.authentication.config;
 
 import com.finance.authentication.dto.CustomUserDetails;
 import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
-import java.time.Instant;
 import java.util.Date;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
@@ -22,9 +19,6 @@ public class JwtTokenProvider {
 
         Date now = new Date();
         Date expirationDate = new Date(now.getTime() + SpringSecurityContext.JWT_EXPIRATION * 1000);
-
-        System.out.println("Current time -> " + now.toString());
-        System.out.println("expiration time -> " + expirationDate.toString());
 
         return Jwts.builder()
                 .claim("email", userDetails.getEmail())
@@ -46,6 +40,8 @@ public class JwtTokenProvider {
                         .getBody();
 
                 Date expirationDate = claims.get("expDate", Date.class);
+                System.out.println("Expiration date : " + expirationDate.toString());
+                System.out.println("Current date : " + new Date().toString());
                 return !expirationDate.before(new Date());
 
             } catch (Exception ex) {

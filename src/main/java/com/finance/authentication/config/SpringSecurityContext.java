@@ -21,7 +21,8 @@ public class SpringSecurityContext {
         "/webjars/**",
         "/register/**",
         "/login/**",
-        "/login"
+        "/login",
+        "/users"
     };
 
     private static SecretKey getJwtKey() {

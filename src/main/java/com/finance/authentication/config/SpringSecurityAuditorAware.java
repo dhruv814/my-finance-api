@@ -22,11 +22,9 @@ public class SpringSecurityAuditorAware implements AuditorAware<Long> {
         // Assuming your user details implement UserDetails and have a method to get user ID
         Object principal = authentication.getPrincipal();
         if (principal instanceof CustomUserDetails customUserDetails) {
-            System.out.println("principal is an instance of User details :- " + customUserDetails.getUserId());
             return Optional.of(customUserDetails.getUserId());
         } else {
             // Handle case where principal is not UserDetails (e.g., anonymous user)
-            System.out.println("principal is not an instance of User details");
             return Optional.empty();
         }
     }

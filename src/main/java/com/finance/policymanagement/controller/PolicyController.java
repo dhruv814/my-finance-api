@@ -33,20 +33,20 @@ public class PolicyController {
 
     @PutMapping("/policy/{id}")
     public ResponseEntity<PolicyDto> updatePolicy(
-            @PathVariable("id") Long id,
+            @PathVariable("id") String id,
             @Valid @RequestBody PolicyDto policy) {
         return new ResponseEntity<>(policyService.updatePolicy(id, policy),
                 HttpStatus.OK);
     }
 
     @DeleteMapping("/policy/{id}")
-    public ResponseEntity<Void> deletePolicy(@PathVariable("id") Long id) {
+    public ResponseEntity<Void> deletePolicy(@PathVariable("id") String id) {
         policyService.deletePolicy(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @GetMapping("/policy/{id}")
-    public ResponseEntity<PolicyDto> getPolicyById(@PathVariable("id") Long id) {
+    public ResponseEntity<PolicyDto> getPolicyById(@PathVariable("id") String id) {
         return new ResponseEntity<>(policyService.getPolicyById(id),
                 HttpStatus.OK);
     }
@@ -57,13 +57,7 @@ public class PolicyController {
             @RequestParam(name = "lifeInsuredId", required = false) Long lifeInsuredId,
             @RequestParam(name = "createdBy", required = false) Long createdBy) {
 
-        if (policyHolderId != null) {
-            return new ResponseEntity<>(policyService.getPoliciesByPolicyHolder(policyHolderId),
-                    HttpStatus.OK);
-        } else if (lifeInsuredId != null) {
-            return new ResponseEntity<>(policyService.getPoliciesByLifeInsured(lifeInsuredId),
-                    HttpStatus.OK);
-        } else if (createdBy != null) {
+        if (createdBy != null) {
             return new ResponseEntity<>(policyService.getPoliciesByCreator(createdBy),
                     HttpStatus.OK);
         } else {

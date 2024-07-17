@@ -23,7 +23,7 @@ public class UserServiceImpl implements UserService {
     private ModelMapper modelMapper;
 
     @Autowired
-    private PasswordEncoder PasswordEncoder;
+    private PasswordEncoder passwordEncoder;
 
     @Override
     public UserDto getUserByEmail(String email) {
@@ -54,7 +54,7 @@ public class UserServiceImpl implements UserService {
                 .firstName(userDto.getFirstName())
                 .lastName(userDto.getLastName())
                 .email(userDto.getEmail())
-                .password(PasswordEncoder.encode(userDto.getPassword()))
+                .password(passwordEncoder.encode(userDto.getPassword()))
                 .role(userDto.getRole())
                 .build();
 

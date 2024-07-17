@@ -2,7 +2,7 @@ package com.finance.policymanagement.controller;
 
 import com.finance.dto.ClaimDto;
 import com.finance.policymanagement.entity.Claim;
-import com.finance.service.infc.ClaimService;
+import com.finance.policymanagement.service.infc.ClaimService;
 import jakarta.validation.Valid;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +25,7 @@ public class ClaimController {
     private ClaimService claimService;
 
     @PostMapping("/claim/{id}")
-    public ResponseEntity<Claim> createClaim(@PathVariable("id") Long id, @Valid @RequestBody ClaimDto claim) {
+    public ResponseEntity<Claim> createClaim(@PathVariable("id") String id, @Valid @RequestBody ClaimDto claim) {
         return new ResponseEntity<>(claimService.createNewClaim(id, claim), HttpStatus.CREATED);
     }
 

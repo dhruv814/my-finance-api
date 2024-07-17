@@ -39,7 +39,7 @@ public class User extends Auditable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long id; 
 
     @Column(name = "first_name", nullable = false)
     @NotBlank(message = "First name is required!!")

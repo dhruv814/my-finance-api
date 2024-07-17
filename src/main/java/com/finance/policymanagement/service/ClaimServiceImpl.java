@@ -5,7 +5,7 @@ import com.finance.policymanagement.dto.PolicyDto;
 import com.finance.policymanagement.entity.Claim;
 import com.finance.common.exception.ResourceNotFoundException;
 import com.finance.common.repository.ClaimRepository;
-import com.finance.service.infc.ClaimService;
+import com.finance.policymanagement.service.infc.ClaimService;
 import java.util.List;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +25,7 @@ public class ClaimServiceImpl implements ClaimService {
     private ModelMapper modelMapper;
 
     @Override
-    public Claim createNewClaim(Long policyId, ClaimDto claim) {
+    public Claim createNewClaim(String policyId, ClaimDto claim) {
         PolicyDto policy = policyService.getPolicyById(policyId);
 //		System.out.println(policy);
 //		Set<ClaimDto> claims = policy.getClaims();

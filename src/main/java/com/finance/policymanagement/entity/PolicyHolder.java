@@ -16,15 +16,17 @@ import lombok.ToString;
  *
  * @author dhruvkumar
  */
-@Setter
-@Getter
-@NoArgsConstructor
-@AllArgsConstructor
-@EqualsAndHashCode(callSuper = true)
-@ToString
-@Entity
+//@Setter
+//@Getter
+//@NoArgsConstructor
+//@AllArgsConstructor
+//@EqualsAndHashCode(callSuper = true)
+//@ToString
+//@Entity
 public class PolicyHolder extends Person {
-
-    @OneToMany(mappedBy = "policyHolder", cascade = CascadeType.ALL)
-    private List<Policy> policies;
+        
+//    private String relationShipToInsured;
+//
+//    @OneToMany(mappedBy = "policyHolder", cascade = CascadeType.ALL)
+//    private List<Policy> policies;
 }

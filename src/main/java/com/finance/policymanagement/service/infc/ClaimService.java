@@ -1,4 +1,4 @@
-package com.finance.service.infc;
+package com.finance.policymanagement.service.infc;
 
 import com.finance.dto.ClaimDto;
 import com.finance.policymanagement.entity.Claim;
@@ -12,7 +12,7 @@ public interface ClaimService {
      * @param claim : take all about claim detail
      * @return : return a saved claim in database
      */
-    Claim createNewClaim(Long policyId, ClaimDto claim);
+    Claim createNewClaim(String policyId, ClaimDto claim);
 
     /**
      *
